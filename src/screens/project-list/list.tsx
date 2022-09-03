@@ -7,6 +7,8 @@ import {Pin} from 'components/pin'
 import dayjs from "dayjs";
 import { useEditProject } from "utils/project";
 import { ButtonNoPadding } from "components/lib";
+import { useDispatch } from "react-redux";
+import { projectListActions } from "./project-list.slice";
 export interface Project {
   id: number;
   name: string;
@@ -21,7 +23,7 @@ interface ListProps extends TableProps<Project> {
   users: User[];
   refresh?:() => void;
   // setProjectModalOpen : (isOpen:boolean) => void
-  projectButton:JSX.Element
+  // projectButton:JSX.Element
 }
 
 export const List = ({ users, ...props }: ListProps) => {
@@ -32,6 +34,8 @@ export const List = ({ users, ...props }: ListProps) => {
   // console.log(props);      //{loading: true, dataSource: Array(1)}
 
   // pagination不需要分页  columns靠着dataSource获取到类型为数组Project每一列渲染方式  dataSource原始数据
+
+  const dispatch = useDispatch()
   return (
     <Table
       pagination={false}
@@ -82,7 +86,8 @@ export const List = ({ users, ...props }: ListProps) => {
             return <Dropdown overlay={<Menu>
               <Menu.Item key= {'edit'}>
                   {/* <ButtonNoPadding type = {'link'} onClick={()=> props.setProjectModalOpen(true)}>编辑</ButtonNoPadding> */}
-                  {props.projectButton}
+                  {/* {props.projectButton} */}
+                  <ButtonNoPadding type={'link'} onClick={() => dispatch(projectListActions.openProjectModal())}>编辑</ButtonNoPadding>
               </Menu.Item>
             </Menu>}>
               <ButtonNoPadding type = {'link'}>...</ButtonNoPadding>

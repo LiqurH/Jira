@@ -10,12 +10,15 @@ import { useProjects } from "utils/project";
 import { useUsers } from "utils/user";
 // import { useUrlQueryParam } from "utils/url"
 import { useProjectsSearchParam } from "./util";
+import { useDispatch } from "react-redux";
+import { projectListActions } from "./project-list.slice";
 // import { Test } from "./test"
 
-export const ProjectListScreen = (props: {
-  // setProjectModalOpen: (isOpen: boolean) => void;
-  projectButton: JSX.Element;
-}) => {
+// export const ProjectListScreen = (props: {
+//   // setProjectModalOpen: (isOpen: boolean) => void;
+//   projectButton: JSX.Element;
+// }) => {
+export const ProjectListScreen = () => {
   useDocumentTitle("项目列表", false);
   // keys是个数组，加进去就会进入循环
   // const keys = ['name','personId'];
@@ -30,6 +33,8 @@ export const ProjectListScreen = (props: {
   } = useProjects(useDebounce(param, 200));
   const { data: users } = useUsers();
 
+  const dispatch = useDispatch()
+
   return (
     <Container>
       <Row between={true}>
@@ -41,14 +46,19 @@ export const ProjectListScreen = (props: {
         >
           创建项目
         </Button> */}
-        {props.projectButton}
+        {/* {props.projectButton} */}
+         <Button
+          onClick={() => dispatch(projectListActions.openProjectModal())}
+        >
+          创建项目
+        </Button>
       </Row>
       {/* <Test/> */}
       <SearchPanel users={users || []} param={param} setParam={setParam} />
       {error ? <Typography.Text>{error.message}</Typography.Text> : null}
       <List
       //  setProjectModalOpen = {props.setProjectModalOpen}
-        projectButton = {props.projectButton}
+        // projectButton = {props.projectButton}
         refresh={retry}
         loading={isLoading}
         users={users || []}

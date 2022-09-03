@@ -1,8 +1,12 @@
 import React, { ReactNode } from "react";
 import { AuthProvider } from "context/auth-context";
-
+import { Provider } from "react-redux";
+import {store} from 'store'
 export const AppProviders = ({ children }: { children: ReactNode }) => {
   return (
-        <AuthProvider>{children}</AuthProvider>
+    <Provider store={store}>
+       <AuthProvider>{children}</AuthProvider>
+    </Provider>
+       
   );
 };

@@ -4,13 +4,18 @@ import { Popover, Typography, List, Divider, Button } from "antd";
 import { useProjects } from "utils/project";
 import styled from "@emotion/styled";
 import { ButtonNoPadding } from "./lib";
+import { useDispatch } from "react-redux";
+import { projectListActions } from "screens/project-list/project-list.slice";
 
-export const ProjectPopover = (props: {
-  /* 组件提升源码解决多层控制项目管理页面 */
-  // setProjectModalOpen: (isOpen: boolean) => void;
-  /* 组件组合源码解决多层控制项目管理页面  */
-  projectButton: JSX.Element;
-}) => {
+// export const ProjectPopover = (props: {
+//   /* 组件提升源码解决多层控制项目管理页面 */
+//   // setProjectModalOpen: (isOpen: boolean) => void;
+//   /* 组件组合源码解决多层控制项目管理页面  */
+//   projectButton: JSX.Element;
+// }) => {
+  /* redux-toolkit解决多层控制项目管理页面  */
+export const ProjectPopover = () => {
+  const dispatch = useDispatch()
   const { data: projects, isLoading } = useProjects();
   const pinnedProjects = projects?.filter((project) => project.pin);
   const content = (
@@ -31,7 +36,14 @@ export const ProjectPopover = (props: {
         {" "}
         创建项目
       </ButtonNoPadding> */}
-      {props.projectButton}
+      {/* {props.projectButton} */}
+       <ButtonNoPadding
+        type={"link"}
+        onClick={() => dispatch(projectListActions.openProjectModal())}
+      >
+        {" "}
+        创建项目
+      </ButtonNoPadding>
     </ContentContainer>
   );
   return (
