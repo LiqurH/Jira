@@ -1,11 +1,18 @@
-import { useHttp } from "utils/http";
-import { User } from "types/user";
-import { useQuery } from "react-query";
+//封装获取用户得hook
+
+import {User} from 'screens/project-list/SearchPanel'
+import { useEffect } from "react"
+import { cleanObject, useDebounce } from "utils"
+import { useHttp } from "./http"
+import { useAsync } from "./use-async"
 
 export const useUsers = (param?: Partial<User>) => {
-  const client = useHttp();
+     //使用自定义hook封装http请求
+    const client = useHttp()        
+    const {run, ...result} = useAsync<User[]>()
 
-  return useQuery<User[]>(["users", param], () =>
-    client("users", { data: param })
-  );
-};
+    useEffect(()=>{
+        run(client('users',{data:cleanObject(param || {})}))
+    },[param]);
+    return result
+} 
