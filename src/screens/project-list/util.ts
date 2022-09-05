@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react"
+import { useProject } from "utils/project"
 import { useUrlQueryParam } from "utils/url"
 
 // 项目类表搜索的参数
@@ -18,14 +19,26 @@ export const useProjectModal = () => {
     const [{projectCreate} , setProjectCreate] = useUrlQueryParam([
         'projectCreate'
     ])
+    const [{editingProjectId} ,setEditingProjectId] = useUrlQueryParam([
+        'editingProjectId'
+    ])
+    const {data:editingProject ,isLoading} = useProject(Number(editingProjectId))
 
     const open = () => setProjectCreate({projectCreate:true})  //项目模式状态框打开函数
-    const close = () => setProjectCreate({projectCreate:undefined})  //项目模式状态框关闭函数
+    const close = () => {
+        projectCreate 
+        ?setProjectCreate({projectCreate:undefined})
+        : setEditingProjectId({editingProjectId:undefined})
+    }  //项目模式状态框关闭函数
+    const startEdit = (id:number) => setEditingProjectId({editingProjectId:id}) // 编辑id项目
 
     return {
-        projectModalOpen: projectCreate === 'true',
+        projectModalOpen: projectCreate === 'true' || Boolean(editingProject),
         open,
-        close
+        close,
+        startEdit,
+        editingProject,
+        isLoading
     }
     
 }

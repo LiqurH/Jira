@@ -38,11 +38,22 @@ export const FullPageErrorFallback = ({error}:{error:Error | null}) => {
     return (
         <FullPage>
             <DevTools/>
-            <Typography.Text type={"danger"}>{error?.message}</Typography.Text>
+            <ErrorBox error={error}/>
+            {/* <Typography.Text type={"danger"}>{error?.message}</Typography.Text> */}
         </FullPage>
     )
 }
 
+// 不能在unknown类型上读取任何属性 解决办法：类型守卫
+// 当符合value?.message这个条件的时候， value就是Error类型 
+const isError = (value:any) : value is Error => value?.message
+export const ErrorBox = ({error}:{error:unknown}) => {
+    if(isError(error)){
+        return <Typography.Text type={"danger"}>{error?.message}</Typography.Text>
+    }
+    return null;
+}
+ 
 
 // button padding为0的组件
 

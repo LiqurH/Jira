@@ -2,8 +2,8 @@ import React from "react";
 import { User } from "screens/project-list/SearchPanel";
 import { Dropdown, Menu, Table } from "antd";
 import { TableProps } from "antd/es/table";
-import {Link} from 'react-router-dom'
-import {Pin} from 'components/pin'
+import { Link } from "react-router-dom";
+import { Pin } from "components/pin";
 import dayjs from "dayjs";
 import { useEditProject } from "utils/project";
 import { ButtonNoPadding } from "components/lib";
@@ -20,37 +20,48 @@ export interface Project {
 //TableProps代表了Table组件得属性类型  dataSource也是其中一个属性类型
 interface ListProps extends TableProps<Project> {
   users: User[];
-  refresh?:() => void;
+  // refresh?:() => void;
   // setProjectModalOpen : (isOpen:boolean) => void
   // projectButton:JSX.Element
 }
 
 export const List = ({ users, ...props }: ListProps) => {
-  const {open} = useProjectModal()
-  const {mutate} = useEditProject();
+  const { open } = useProjectModal();
+  const { mutate } = useEditProject();
   // const pinProject = (id:number , pin: boolean) => mutate({id , pin})
   //柯里化
-  const pinProject = ( id: number )=> ( pin: boolean ) => mutate({id , pin}).then(props.refresh)
+  const pinProject = (id: number) => (pin: boolean) =>mutate({ id, pin })
+    // mutate({ id, pin }).then(props.refresh);
   // console.log(props);      //{loading: true, dataSource: Array(1)}
 
   // pagination不需要分页  columns靠着dataSource获取到类型为数组Project每一列渲染方式  dataSource原始数据
+
+  const {startEdit} = useProjectModal()
+  const editProject = (id: number) => () =>startEdit(id)
   return (
     <Table
       pagination={false}
       columns={[
         {
-          title:<Pin checked={true} disabled={true}/>,
-          render(value , project){
+          title: <Pin checked={true} disabled={true} />,
+          render(value, project) {
             // return <Pin checked={project.pin} onCheckedChange={(pin) => {pinProject(project.id ,pin)}}/>
-            return <Pin checked={project.pin} onCheckedChange={pinProject(project.id)}/>
-          }
-        }, 
+            return (
+              <Pin
+                checked={project.pin}
+                onCheckedChange={pinProject(project.id)}
+              />
+            );
+          },
+        },
         {
           title: "名称",
           sorter: (a, b) => a.name.localeCompare(b.name), // 排序，localeCompare可以排序中文字符
-          render(value ,project ){
-            return <Link to={`projects/${String(project.id)}`}>{project.name}</Link>
-          }
+          render(value, project) {
+            return (
+              <Link to={`projects/${String(project.id)}`}>{project.name}</Link>
+            );
+          },
         },
         {
           title: "部门",
@@ -80,17 +91,26 @@ export const List = ({ users, ...props }: ListProps) => {
           },
         },
         {
-          render(value , project) {
-            return <Dropdown overlay={<Menu>
-              <Menu.Item key= {'edit'}>
-                  {/* <ButtonNoPadding type = {'link'} onClick={()=> props.setProjectModalOpen(true)}>编辑</ButtonNoPadding> */}
-                  {/* {props.projectButton} */}
-                  <ButtonNoPadding type = {'link'} onClick={open}>编辑</ButtonNoPadding>
-              </Menu.Item>
-            </Menu>}>
-              <ButtonNoPadding type = {'link'}>...</ButtonNoPadding>
-            </Dropdown>
-          }
+          render(value, project) {
+            return (
+              <Dropdown
+                overlay={
+                  <Menu>
+                    <Menu.Item key={"edit"}>
+                      {/* <ButtonNoPadding type = {'link'} onClick={()=> props.setProjectModalOpen(true)}>编辑</ButtonNoPadding> */}
+                      {/* {props.projectButton} */}
+                      <ButtonNoPadding type={"link"} onClick={editProject(project.id)}>
+                        编辑
+                      </ButtonNoPadding>
+                    </Menu.Item>
+                    <Menu.Item key={"delete"}>删除</Menu.Item>
+                  </Menu>
+                }
+              >
+                <ButtonNoPadding type={"link"}>...</ButtonNoPadding>
+              </Dropdown>
+            );
+          },
         },
       ]}
       // dataSource ={list} //dataSource原始数据

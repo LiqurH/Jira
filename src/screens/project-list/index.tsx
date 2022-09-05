@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useDebounce, useDocumentTitle } from "utils";
 import styled from "@emotion/styled";
 import { Typography, Button } from "antd";
-import { ButtonNoPadding, Row } from "components/lib";
+import { ButtonNoPadding, ErrorBox, Row } from "components/lib";
 import { useProjects } from "utils/project";
 import { useUsers } from "utils/user";
 // import { useUrlQueryParam } from "utils/url"
@@ -27,7 +27,7 @@ export const ProjectListScreen = (props: {
     isLoading,
     error,
     data: list,
-    retry,
+    // retry,
   } = useProjects(useDebounce(param, 200));
   const { data: users } = useUsers();
 
@@ -53,11 +53,12 @@ export const ProjectListScreen = (props: {
       </Row>
       {/* <Test/> */}
       <SearchPanel users={users || []} param={param} setParam={setParam} />
-      {error ? <Typography.Text>{error.message}</Typography.Text> : null}
+      <ErrorBox error={error}/>
+      {/* {error ? <Typography.Text>{error.message}</Typography.Text> : null} */}
       <List
       //  setProjectModalOpen = {props.setProjectModalOpen}
         // projectButton = {props.projectButton}
-        refresh={retry}
+        // refresh={retry}
         loading={isLoading}
         users={users || []}
         dataSource={list || []}
