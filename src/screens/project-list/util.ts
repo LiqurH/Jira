@@ -11,3 +11,44 @@ export const useProjectsSearchParam = () => {
         setParam 
     ] as const
 }
+
+
+// 用url管理项目模式状态框的hook  全局状态管理的功能
+export const useProjectModal = () => {
+    const [{projectCreate} , setProjectCreate] = useUrlQueryParam([
+        'projectCreate'
+    ])
+
+    const open = () => setProjectCreate({projectCreate:true})  //项目模式状态框打开函数
+    const close = () => setProjectCreate({projectCreate:undefined})  //项目模式状态框关闭函数
+
+    return {
+        projectModalOpen: projectCreate === 'true',
+        open,
+        close
+    }
+    
+}
+
+/*
+    return [
+        projectCreate === 'true' , // 判断项目模式状态框是否打开的boolen值
+        open,
+        close
+    ] as const
+
+    这样返回和useState一样，可以随意命名
+
+    const [ xxxx , xxxx ,xxxx ] = useProjectModal()
+*/
+
+/*
+    当返回东西比较多的时候：（可以返回一个对象）
+     return {
+        projectModalOpen: projectCreate === 'true'
+        open : open ,
+        close : close
+    }
+    //名字就不能随便改了    
+    const [ projectModalOpen , open ,close ] = useProjectModal()
+*/

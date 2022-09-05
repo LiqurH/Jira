@@ -5,17 +5,18 @@ import { useState } from "react";
 import { useDebounce, useDocumentTitle } from "utils";
 import styled from "@emotion/styled";
 import { Typography, Button } from "antd";
-import { Row } from "components/lib";
+import { ButtonNoPadding, Row } from "components/lib";
 import { useProjects } from "utils/project";
 import { useUsers } from "utils/user";
 // import { useUrlQueryParam } from "utils/url"
-import { useProjectsSearchParam } from "./util";
+import { useProjectModal, useProjectsSearchParam } from "./util";
 // import { Test } from "./test"
 
 export const ProjectListScreen = (props: {
   // setProjectModalOpen: (isOpen: boolean) => void;
-  projectButton: JSX.Element;
+  // projectButton: JSX.Element;
 }) => {
+  const { open } = useProjectModal()
   useDocumentTitle("项目列表", false);
   // keys是个数组，加进去就会进入循环
   // const keys = ['name','personId'];
@@ -41,14 +42,21 @@ export const ProjectListScreen = (props: {
         >
           创建项目
         </Button> */}
-        {props.projectButton}
+        {/* {props.projectButton} */}
+        <ButtonNoPadding
+        type={"link"}
+        onClick={open}
+      >
+        {" "}
+        创建项目
+      </ButtonNoPadding>
       </Row>
       {/* <Test/> */}
       <SearchPanel users={users || []} param={param} setParam={setParam} />
       {error ? <Typography.Text>{error.message}</Typography.Text> : null}
       <List
       //  setProjectModalOpen = {props.setProjectModalOpen}
-        projectButton = {props.projectButton}
+        // projectButton = {props.projectButton}
         refresh={retry}
         loading={isLoading}
         users={users || []}

@@ -7,6 +7,7 @@ import {Pin} from 'components/pin'
 import dayjs from "dayjs";
 import { useEditProject } from "utils/project";
 import { ButtonNoPadding } from "components/lib";
+import { useProjectModal } from "./util";
 export interface Project {
   id: number;
   name: string;
@@ -21,10 +22,11 @@ interface ListProps extends TableProps<Project> {
   users: User[];
   refresh?:() => void;
   // setProjectModalOpen : (isOpen:boolean) => void
-  projectButton:JSX.Element
+  // projectButton:JSX.Element
 }
 
 export const List = ({ users, ...props }: ListProps) => {
+  const {open} = useProjectModal()
   const {mutate} = useEditProject();
   // const pinProject = (id:number , pin: boolean) => mutate({id , pin})
   //柯里化
@@ -82,7 +84,8 @@ export const List = ({ users, ...props }: ListProps) => {
             return <Dropdown overlay={<Menu>
               <Menu.Item key= {'edit'}>
                   {/* <ButtonNoPadding type = {'link'} onClick={()=> props.setProjectModalOpen(true)}>编辑</ButtonNoPadding> */}
-                  {props.projectButton}
+                  {/* {props.projectButton} */}
+                  <ButtonNoPadding type = {'link'} onClick={open}>编辑</ButtonNoPadding>
               </Menu.Item>
             </Menu>}>
               <ButtonNoPadding type = {'link'}>...</ButtonNoPadding>

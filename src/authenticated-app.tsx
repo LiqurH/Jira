@@ -16,14 +16,15 @@ import { ProjectPopover } from "components/project-popover";
 
 //登录后的主页
 export const AuthenticatedApp = () => {
-  const [projectModalOpen, setProjectModalOpen] = useState(false);
+  // const [projectModalOpen, setProjectModalOpen] = useState(false);
 
   return (
     <Container>
-      {/* 组件提升源码解决多层控制项目管理页面 */}
-      {/* <PageHeader setProjectModalOpen = {setProjectModalOpen}/> */}
-      {/* 组件组合源码解决多层控制项目管理页面  */}
-      <PageHeader
+      <Router>
+        {/* 组件提升源码解决多层控制项目管理页面 */}
+        {/* <PageHeader setProjectModalOpen = {setProjectModalOpen}/> */}
+        {/* 组件组合源码解决多层控制项目管理页面  */}
+        {/* <PageHeader
         projectButton={
           <ButtonNoPadding
             type={"link"}
@@ -33,26 +34,28 @@ export const AuthenticatedApp = () => {
             创建项目
           </ButtonNoPadding>
         }
-      />
-      <Main>
-        {/* <ProjectListScreen/> */}
-        <Router>
+      /> */}
+        <PageHeader />
+        <Main>
+          {/* <ProjectListScreen/> */}
+
           <Routes>
             <Route
               path={"projects"}
               element={
                 // <ProjectListScreen setProjectModalOpen={setProjectModalOpen} />
-                <ProjectListScreen
-                  projectButton={
-                    <ButtonNoPadding
-                      type={"link"}
-                      onClick={() => setProjectModalOpen(true)}
-                    >
-                      {" "}
-                      创建项目
-                    </ButtonNoPadding>
-                  }
-                />
+                // <ProjectListScreen
+                //   projectButton={
+                //     <ButtonNoPadding
+                //       type={"link"}
+                //       onClick={() => setProjectModalOpen(true)}
+                //     >
+                //       {" "}
+                //       创建项目
+                //     </ButtonNoPadding>
+                //   }
+                // />
+                <ProjectListScreen />
               }
             />
             <Route path={"projects/:projectId/*"} element={<ProjectScreen />} />
@@ -61,26 +64,28 @@ export const AuthenticatedApp = () => {
               index
               element={
                 // <ProjectListScreen setProjectModalOpen={setProjectModalOpen} />
-                <ProjectListScreen
-                projectButton={
-                  <ButtonNoPadding
-                    type={"link"}
-                    onClick={() => setProjectModalOpen(true)}
-                  >
-                    {" "}
-                    创建项目
-                  </ButtonNoPadding>
-                }
-              />
+                //   <ProjectListScreen
+                //   projectButton={
+                //     <ButtonNoPadding
+                //       type={"link"}
+                //       onClick={() => setProjectModalOpen(true)}
+                //     >
+                //       {" "}
+                //       创建项目
+                //     </ButtonNoPadding>
+                //   }
+                // />
+                <ProjectListScreen />
               }
             />
           </Routes>
-        </Router>
-      </Main>
-      <ProjectModal
+        </Main>
+        {/* <ProjectModal
         projectModalOpen={projectModalOpen}
         onClose={() => setProjectModalOpen(false)}
-      />
+      /> */}
+        <ProjectModal />
+      </Router>
     </Container>
   );
 };
@@ -90,7 +95,7 @@ const PageHeader = (props: {
   /* 组件提升源码解决多层控制项目管理页面 */
   //   setProjectModalOpen: (isOpen: boolean) => void;
   /* 组件组合源码解决多层控制项目管理页面  */
-  projectButton: JSX.Element;
+  // projectButton: JSX.Element;
 }) => {
   return (
     <Header between={true}>
@@ -99,7 +104,8 @@ const PageHeader = (props: {
           <SoftwareLogo width={"18rem"} color={"rgb(38 , 132 , 255)"} />
         </ButtonNoPadding>
         {/* <ProjectPopover setProjectModalOpen={props.setProjectModalOpen} /> */}
-        <ProjectPopover {...props} />
+        {/* <ProjectPopover {...props} /> */}
+        <ProjectPopover />
         <span>用户</span>
       </HeaderLeft>
       <HeaderRight>
