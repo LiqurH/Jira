@@ -1,13 +1,13 @@
 import React from "react";
 import { User } from "screens/project-list/SearchPanel";
-import { Dropdown, Menu, Table } from "antd";
+import { Dropdown, Menu, Modal, Table } from "antd";
 import { TableProps } from "antd/es/table";
 import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
 import dayjs from "dayjs";
-import { useEditProject } from "utils/project";
+import { useDeleteProject, useEditProject } from "utils/project";
 import { ButtonNoPadding } from "components/lib";
-import { useProjectModal } from "./util";
+import { useProjectModal, useProjectQueryKey } from "./util";
 export interface Project {
   id: number;
   name: string;
@@ -26,8 +26,8 @@ interface ListProps extends TableProps<Project> {
 }
 
 export const List = ({ users, ...props }: ListProps) => {
-  const { open } = useProjectModal();
-  const { mutate } = useEditProject();
+  // const { open } = useProjectModal();
+  const { mutate } = useEditProject(useProjectQueryKey());
   // const pinProject = (id:number , pin: boolean) => mutate({id , pin})
   //柯里化
   const pinProject = (id: number) => (pin: boolean) =>mutate({ id, pin })
@@ -35,9 +35,6 @@ export const List = ({ users, ...props }: ListProps) => {
   // console.log(props);      //{loading: true, dataSource: Array(1)}
 
   // pagination不需要分页  columns靠着dataSource获取到类型为数组Project每一列渲染方式  dataSource原始数据
-
-  const {startEdit} = useProjectModal()
-  const editProject = (id: number) => () =>startEdit(id)
   return (
     <Table
       pagination={false}
@@ -92,24 +89,7 @@ export const List = ({ users, ...props }: ListProps) => {
         },
         {
           render(value, project) {
-            return (
-              <Dropdown
-                overlay={
-                  <Menu>
-                    <Menu.Item key={"edit"}>
-                      {/* <ButtonNoPadding type = {'link'} onClick={()=> props.setProjectModalOpen(true)}>编辑</ButtonNoPadding> */}
-                      {/* {props.projectButton} */}
-                      <ButtonNoPadding type={"link"} onClick={editProject(project.id)}>
-                        编辑
-                      </ButtonNoPadding>
-                    </Menu.Item>
-                    <Menu.Item key={"delete"}>删除</Menu.Item>
-                  </Menu>
-                }
-              >
-                <ButtonNoPadding type={"link"}>...</ButtonNoPadding>
-              </Dropdown>
-            );
+            return <More project={project}/>
           },
         },
       ]}
@@ -137,3 +117,40 @@ export const List = ({ users, ...props }: ListProps) => {
     </Table>
   );
 };
+
+
+const More =( {project} : {project:Project}) => {
+  const {startEdit} = useProjectModal()
+  const editProject = (id: number) => () =>startEdit(id)
+  const {mutate:deleteProject} = useDeleteProject(useProjectQueryKey())
+  const confirmDeleteProject = ( id : number ) => {
+    Modal.confirm({
+      title:'确认删除项目？',
+      content:'点击确认删除',
+      okText:'确定',
+      onOk(){
+        deleteProject({id})
+      }
+    })
+  }
+  return <Dropdown
+  overlay={
+    <Menu>
+      <Menu.Item key={"edit"}>
+        {/* <ButtonNoPadding type = {'link'} onClick={()=> props.setProjectModalOpen(true)}>编辑</ButtonNoPadding> */}
+        {/* {props.projectButton} */}
+        <ButtonNoPadding type={"link"} onClick={editProject(project.id)}>
+          编辑
+        </ButtonNoPadding>
+      </Menu.Item>
+      <Menu.Item key={"delete"}>
+      <ButtonNoPadding type={"link"} onClick={() => confirmDeleteProject(project.id)}>
+          删除
+        </ButtonNoPadding>
+      </Menu.Item>
+    </Menu>
+  }
+>
+  <ButtonNoPadding type={"link"}>...</ButtonNoPadding>
+</Dropdown>
+}

@@ -39,7 +39,7 @@ export const http = async ( endpoint : string , { data , token , headers , ...cu
                 window.location.reload()
                 return Promise.reject({message:'请重新登陆'})
             }
-            const data = await res.json()
+            const data = await res.json()   
             if(res.ok){
                 return data
             }else{

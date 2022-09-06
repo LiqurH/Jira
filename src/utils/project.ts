@@ -1,19 +1,22 @@
 //抽取搜索请求返回状态得hook
 
-import { useCallback, useEffect } from "react"
-import { useQuery ,useMutation ,useQueryClient} from "react-query"
-import { Project } from "screens/project-list/List"
-import { cleanObject, useDebounce } from "utils"
-import { useHttp } from "./http"
-import { useAsync } from "./use-async"
+import { useCallback, useEffect } from "react";
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import { Project } from "screens/project-list/List";
+import { useProjectsSearchParam } from "screens/project-list/util";
+import { cleanObject, useDebounce } from "utils";
+import { useHttp } from "./http";
+import { useAsync } from "./use-async";
+import { useAddConfig, useEditConfig ,useDeleteConfig} from "./use-optimistic-options";
+import { QueryKey } from "react-query"
 //注意这个引入  import * as 一次性全部导入模块的所有变量 as qs 用来命名
-//import * as qs from 'qs' 
+//import * as qs from 'qs'
 //用于获取Project列表
 // export const useProjects = (param?: Partial<Project>) => {
 //      //使用自定义hook封装http请求
 //     const client = useHttp()
-    
-//     //维持loading得信息        
+
+//     //维持loading得信息
 //     const {run, ...result} = useAsync<Project[]>()
 //     // const [list , setList] = useState([])
 //     // const [isLoading ,setIsLoading] = useState(false)
@@ -36,8 +39,7 @@ import { useAsync } from "./use-async"
 //         //     setList([])
 //         //     setError(err)
 //         // })
-//         // .finally(()=>setIsLoading(false))    
-
+//         // .finally(()=>setIsLoading(false))
 
 //         //${apiUrl}/projects?name=${param.name}&personId=${param.personId}
 //         // fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(debouncedParam))}`).then(async res => {
@@ -45,7 +47,6 @@ import { useAsync } from "./use-async"
 //         //         setList(await res.json())
 //         //     }
 //         // })
-
 
 //         // eslint-disable-next-line react-hooks/exhaustive-deps
 //         // run函数是非状态非基本类型的变量，放状态里会导致无限循环
@@ -55,11 +56,13 @@ import { useAsync } from "./use-async"
 
 // 用useQuery改造
 export const useProjects = (param?: Partial<Project>) => {
-   const client = useHttp()      
-   
-   //['projects', param]  里面的值变化的时候就会重新触发useQuery来发请求
-   return useQuery<Project[]>(['projects', param] , () => client('projects' , {data : param}))
-}
+  const client = useHttp();
+
+  //['projects', param]  里面的值变化的时候就会重新触发useQuery来发请求
+  return useQuery<Project[]>(["projects", param], () =>
+    client("projects", { data: param })
+  );
+};
 
 // 向服务端发送编辑请求的方法  下面是用reactQuery替换useAsync
 // export const useEditProject = () => {
@@ -76,16 +79,42 @@ export const useProjects = (param?: Partial<Project>) => {
 //         ...asyncResult
 //     }
 // }
-export const useEditProject = () => {
-    const client = useHttp();
-    const queryClient = useQueryClient()
-    return useMutation((params:Partial<Project>) => client(`projects/${params.id}` , {
-        method:'PATCH',
-        data:params 
-    }),{
-        onSuccess:() => queryClient.invalidateQueries('projects')
-    })
-}
+export const useEditProject = (queryKey:QueryKey) => {
+  // 编辑收藏项目列表
+  const client = useHttp();
+//   const queryClient = useQueryClient();
+//   const [searchParams] = useProjectsSearchParam();
+//   const queryKey = ["projects", searchParams];
+  return useMutation(
+    (params: Partial<Project>) =>
+      client(`projects/${params.id}`, {
+        method: "PATCH",
+        data: params,
+      }),
+      useEditConfig(queryKey)
+    // {
+    //   onSuccess: () => queryClient.invalidateQueries(queryKey),
+    //   async onMutate(target: Partial<Project>) {
+    //     console.log(queryKey);
+    //     const previousItems = queryClient.getQueryData(queryKey);
+    //     queryClient.setQueryData(queryKey, (old?: Project[]) => {
+    //       return (
+    //         old?.map((project) =>
+    //           project.id === target.id ? { ...project, ...target } : project
+    //         ) || []
+    //       );
+    //     });
+    //     return { previousItems };
+    //   },
+    //   onError(error, newItem, context) {
+    //     queryClient.setQueryData(
+    //       queryKey,
+    //       (context as { previousItems: Project[] }).previousItems
+    //     );
+    //   },
+    // }
+  );
+};
 // export const useAddProject = () => {
 //     const {run,...asyncResult} = useAsync();
 //     const client = useHttp();
@@ -101,25 +130,42 @@ export const useEditProject = () => {
 //     }
 // }
 
-export const useAddProject = () => {  // 增加项目列表
-    const client = useHttp();
-    const queryClient = useQueryClient()
-    return useMutation((params:Partial<Project>) => client(`projects` , {
-        data:params,
-        method:'POST'
-    }),{
-        onSuccess:() => queryClient.invalidateQueries('projects')
-    })
-}
+export const useAddProject = (queryKey:QueryKey) => {
+  // 增加项目列表
+  const client = useHttp();
+//   const queryClient = useQueryClient();
+  return useMutation(
+    (params: Partial<Project>) =>
+      client(`projects`, {
+        data: params,
+        method: "POST",
+      }),
+      useAddConfig(queryKey)
+    // {
+    //   onSuccess: () => queryClient.invalidateQueries("projects"),
+    // }
+  );
+};
+
+export const useDeleteProject = (queryKey:QueryKey) => {
+  const client = useHttp();
+  return useMutation(
+    ({id} : {id:number}) =>
+      client(`projects/${id}`, {
+        method: "DELETE",
+      }),
+      useDeleteConfig(queryKey)
+  );
+};
 
 // 获取project详情的API
-export  const useProject = (id? :number) => {
-    const client = useHttp()
-    return useQuery<Project[]>(
-        ['project', {id}],
-        ()=>client(`projects/${id}`),
-        {
-            enabled:Boolean(id)  // !!id
-        }
-    )
-}
+export const useProject = (id?: number) => {
+  const client = useHttp();
+  return useQuery<Project[]>(
+    ["project", { id }],
+    () => client(`projects/${id}`),
+    {
+      enabled: Boolean(id), // !!id
+    }
+  );
+};
