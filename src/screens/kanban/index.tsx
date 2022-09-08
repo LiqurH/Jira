@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { ScreenContainer } from "components/lib";
 import React from "react";
 import { SearchPanel } from "screens/kanban/search-panel";
 import { useDocumentTitle } from "utils";
@@ -11,7 +12,7 @@ export const KanBanScreen = () => {
   const { data: currentProject } = useProjectInUrl();
   const { data: kanbans } = useKanBans(useKanbanSearchParams());
   return (
-    <div>
+    <ScreenContainer>
       <h1>{currentProject?.name}看板</h1>
       <SearchPanel/>
       <ColumnsContainer>
@@ -21,12 +22,12 @@ export const KanBanScreen = () => {
           ))
         }
       </ColumnsContainer>
-    </div>
+    </ScreenContainer>
   );
 };
 
 const ColumnsContainer = styled.div`
   display: flex;
-  overflow: hidden;
-  margin-right: 2rem;
+  overflow-x: scroll;
+  flex: 1;
 `;

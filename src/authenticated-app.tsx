@@ -157,4 +157,6 @@ const HeaderRight = styled.div``;
 
 const Main = styled.main`
   grid-area: main;
+  display: flex;
+  overflow: hidden;
 `;
