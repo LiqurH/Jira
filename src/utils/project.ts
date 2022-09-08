@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { Project } from "screens/project-list/List";
+import { Project } from "types/project";
 import { useProjectsSearchParam } from "screens/project-list/util";
 import { cleanObject, useDebounce } from "utils";
 import { useHttp } from "./http";
@@ -161,7 +161,7 @@ export const useDeleteProject = (queryKey:QueryKey) => {
 // 获取project详情的API
 export const useProject = (id?: number) => {
   const client = useHttp();
-  return useQuery<Project[]>(
+  return useQuery<Project>(
     ["project", { id }],
     () => client(`projects/${id}`),
     {

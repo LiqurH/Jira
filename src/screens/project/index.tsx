@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from 'react-router-dom'
 import { Route , Routes } from "react-router-dom";
 import { EpicScreen } from "screens/epic";
-import { KanBanScreen } from "screens/kanban";
+import { KanBanScreen } from "screens/kanban/index";
 export const ProjectScreen = () => {
     return <div>
         <h1>ProjectScreen</h1>

@@ -1,6 +1,6 @@
 //封装获取用户得hook
 
-import {User} from 'screens/project-list/SearchPanel'
+import {User} from 'types/user'
 import { useEffect } from "react"
 import { cleanObject, useDebounce } from "utils"
 import { useHttp } from "./http"

@@ -33,6 +33,11 @@ export const ProjectModal = () => {
         form.resetFields()
         close()
       })
+    } 
+
+    const closeModal = () => {
+      form.resetFields() // 清空输入框内容
+      close()
     }
 
     const title = editingProject ? '编辑项目' : '创建项目'
@@ -43,7 +48,7 @@ export const ProjectModal = () => {
     return (
       <Drawer
         forceRender = {true}
-        onClose={close}
+        onClose={closeModal}
         visible={projectModalOpen}
         width={"100%"}
       >

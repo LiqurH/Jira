@@ -1,5 +1,5 @@
 import React from "react";
-import { User } from "screens/project-list/SearchPanel";
+import { User } from "types/user";
 import { Dropdown, Menu, Modal, Table } from "antd";
 import { TableProps } from "antd/es/table";
 import { Link } from "react-router-dom";
@@ -8,14 +8,7 @@ import dayjs from "dayjs";
 import { useDeleteProject, useEditProject } from "utils/project";
 import { ButtonNoPadding } from "components/lib";
 import { useProjectModal, useProjectQueryKey } from "./util";
-export interface Project {
-  id: number;
-  name: string;
-  personId: number;
-  pin: boolean;
-  organization: string;
-  created: number;
-}
+import {Project } from 'types/project'
 
 //TableProps代表了Table组件得属性类型  dataSource也是其中一个属性类型
 interface ListProps extends TableProps<Project> {
