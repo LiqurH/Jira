@@ -25,7 +25,7 @@ export const ProjectScreen = () => {
             </Menu>   
         </Aside>
         <Main>
-        <Routes>
+        <Routes>    
             <Route path={'kanban'} element={<KanBanScreen/>}/>
             <Route path={'epic'} element={<EpicScreen/>}/>
             <Route index element={<KanBanScreen />} />
@@ -35,15 +35,20 @@ export const ProjectScreen = () => {
 }
 
 const Container = styled.div`
+    width: 100%;
     display: grid;
     grid-template-columns: 16rem 1fr;
+    /* overflow: hidden; */
+   
 `
 
 const Aside = styled.aside`
     background-color: rgb(244,245,247);
     display: flex;
 `
+//overflow: hidden; 主体不能向外扩展，在kanban-coloum下设置overflow: scroll;可以是内部元素在内容区内滚动
 const Main = styled.div`
     box-shadow: -5px 0 -5px rgba(0 , 0 , 0 , 0.1);
     display: flex;
+    overflow: hidden;
 `

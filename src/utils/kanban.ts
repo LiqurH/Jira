@@ -1,8 +1,10 @@
 // 获取看板页面数据
 
-import { useQuery } from "react-query";
+import { QueryKey, useQuery } from "react-query";
 import { KanBan } from "types/kanban";
 import { useHttp } from "./http";
+import { useMutation} from "react-query";
+import { useAddConfig, useDeleteConfig } from "./use-optimistic-options";
 
 export const useKanBans = (param?: Partial<KanBan>) => {
     const client = useHttp();
@@ -10,5 +12,34 @@ export const useKanBans = (param?: Partial<KanBan>) => {
     //['projects', param]  里面的值变化的时候就会重新触发useQuery来发请求
     return useQuery<KanBan[]>(["kanbans", param], () =>
       client("kanbans", { data: param })
+    );
+  };
+
+  export const useAddKanban = (queryKey:QueryKey) => {
+    // 增加项目列表
+    const client = useHttp();
+  //   const queryClient = useQueryClient();
+    return useMutation(
+      (params: Partial<KanBan>) =>
+        client(`kanbans`, {
+          data: params,
+          method: "POST",
+        }),
+        useAddConfig(queryKey)
+      // {
+      //   onSuccess: () => queryClient.invalidateQueries("projects"),
+      // }
+    );
+  };
+
+  //删除看板功能
+  export const useDeleteKanban = (queryKey:QueryKey) => {
+    const client = useHttp();
+    return useMutation(
+      ({id} : {id:number}) =>
+        client(`kanbans/${id}`, {
+          method: "DELETE",
+        }),
+        useDeleteConfig(queryKey)
     );
   };

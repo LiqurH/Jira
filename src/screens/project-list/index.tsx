@@ -33,7 +33,7 @@ export const ProjectListScreen = (props: {
 
   return (
     <Container>
-      <Row between={true}>
+      <Row marginBottom={2} between={true}>
         <h1>项目列表</h1>
         {/* <Button
           onClick={() => {
@@ -75,5 +75,6 @@ export const ProjectListScreen = (props: {
 // }
 
 const Container = styled.div`
+  width: 100%;
   padding: 3.2rem;
 `;

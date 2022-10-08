@@ -20,6 +20,7 @@ export const AuthenticatedApp = () => {
 
   return (
     <Container>
+      
       <Router>
         {/* 组件提升源码解决多层控制项目管理页面 */}
         {/* <PageHeader setProjectModalOpen = {setProjectModalOpen}/> */}
@@ -142,21 +143,28 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: 6rem 1fr;
   height: 100vh;
-  grid-template-areas: "header header" "main main";
+  /* display: grid;
+  grid-template-rows: 6rem 1fr;
+  height: 100vh;
+  grid-template-areas: "header header" "main main"; */
 `;
 
 const Header = styled(Row)`
-  padding: 3.2rem;
+  /* padding: 3.2rem;
   grid-area: header;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+  z-index: 1; */
+  padding: 3.2rem;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
   z-index: 1;
+
   /* justify-content: space-between; */
 `;
 const HeaderLeft = styled(Row)``;
 const HeaderRight = styled.div``;
 
 const Main = styled.main`
-  grid-area: main;
+  /* grid-area: main;  */
   display: flex;
-  overflow: hidden;
+  overflow: hidden;  
 `;

@@ -81,9 +81,9 @@ export const ProjectModal = () => {
   };
 
 const Container = styled.div`
-  flex-direction: column;
   height: 80vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `
