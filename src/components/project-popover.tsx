@@ -12,7 +12,7 @@ export const ProjectPopover = (props: {
   /* 组件组合源码解决多层控制项目管理页面  */
   // projectButton: JSX.Element;
 }) => {
-  const { data: projects, isLoading } = useProjects();
+  const { data: projects, refetch } = useProjects();
   const pinnedProjects = projects?.filter((project) => project.pin);
   const { open } = useProjectModal()
   const content = (
@@ -44,7 +44,7 @@ export const ProjectPopover = (props: {
     </ContentContainer>
   );
   return (
-    <Popover placement={"bottom"} content={content}>
+    <Popover onVisibleChange={()=> refetch()} placement={"bottom"} content={content}>
       <span>项目</span>
     </Popover>
   );

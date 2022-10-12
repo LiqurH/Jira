@@ -13,6 +13,7 @@ import { ProjectScreen } from "screens/project";
 import { resetRoute } from "utils";
 import { ProjectModal } from "screens/project-list/ProjectModal";
 import { ProjectPopover } from "components/project-popover";
+import { UserPopover } from "components/user-popover";
 
 //登录后的主页
 export const AuthenticatedApp = () => {
@@ -107,7 +108,7 @@ const PageHeader = (props: {
         {/* <ProjectPopover setProjectModalOpen={props.setProjectModalOpen} /> */}
         {/* <ProjectPopover {...props} /> */}
         <ProjectPopover />
-        <span>用户</span>
+        <UserPopover/>
       </HeaderLeft>
       <HeaderRight>
         <User />

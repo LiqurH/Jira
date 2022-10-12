@@ -5,14 +5,23 @@ import { useEffect } from "react"
 import { cleanObject, useDebounce } from "utils"
 import { useHttp } from "./http"
 import { useAsync } from "./use-async"
+import { useQuery } from 'react-query'
 
+// export const useUsers = (param?: Partial<User>) => {
+//      //使用自定义hook封装http请求
+//     const client = useHttp()        
+//     const {run, ...result} = useAsync<User[]>()
+
+//     useEffect(()=>{
+//         run(client('users',{data:cleanObject(param || {})}))
+//     },[param]);
+//     return result
+// } 
 export const useUsers = (param?: Partial<User>) => {
-     //使用自定义hook封装http请求
-    const client = useHttp()        
-    const {run, ...result} = useAsync<User[]>()
-
-    useEffect(()=>{
-        run(client('users',{data:cleanObject(param || {})}))
-    },[param]);
-    return result
-} 
+    const client = useHttp();
+  
+    return useQuery<User[]>(["users", param], () =>
+      client("users", { data: param })
+    );
+  };
+  
