@@ -16,7 +16,8 @@ import { ProjectPopover } from "components/project-popover";
 import { UserPopover } from "components/user-popover";
 
 //登录后的主页
-export const AuthenticatedApp = () => {
+// export const AuthenticatedApp = () => {
+const AuthenticatedApp = () => {
   // const [projectModalOpen, setProjectModalOpen] = useState(false);
 
   return (
@@ -91,6 +92,7 @@ export const AuthenticatedApp = () => {
     </Container>
   );
 };
+export default AuthenticatedApp
 
 // 提取header组件
 const PageHeader = (props: {

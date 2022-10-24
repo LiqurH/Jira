@@ -11,7 +11,7 @@ import right from "assets/right.svg";
 import { useDocumentTitle } from "utils";
 import { ErrorBox } from "components/lib";
 
-export const UnauthenticatedApp = () => {
+ const UnauthenticatedApp = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [error ,setError] = useState<Error | null>(null);
   // 头部样式
@@ -39,6 +39,9 @@ export const UnauthenticatedApp = () => {
     </Container>
   );
 };
+
+export default UnauthenticatedApp
+
 
 //CSS-IN_JS 写法
 const Container = styled.div`
